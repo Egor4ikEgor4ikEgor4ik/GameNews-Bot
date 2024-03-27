@@ -1,9 +1,10 @@
+import os
+from textwrap import dedent
+
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-import os
 import telegram
-from textwrap import dedent
 
 load_dotenv()
 
