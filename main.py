@@ -22,22 +22,33 @@ def get_last_news_coopland():
 def build_post_coopland(headline_coopland,description_coopland,post_url_coopland):
     post_coopland_text = dedent(f'''{headline_coopland}  
     {description_coopland}    
-Ссылка на источник: {post_url_coopland} ''')    
-    
-    
+Ссылка на источник: {post_url_coopland} ''')     
     return post_coopland_text
 
-headline_coopland,description_coopland,picture_url_coopland,post_url_coopland = get_last_news_coopland()
 
-response = requests.get(picture_url_coopland)
-with open(f'./images_coopland/bebra_coopland.png', "wb") as file:    
+def save_and_download_image(picture_url,photo_path):
+        response = requests.get(picture_url)
+        with open(photo_path, "wb") as file:
             file.write(response.content)
+        return response
+    
 
-telegram_bot_token = os.getenv("BOT_TOKEN")
-telegram_chat_id = '@gamingnewsfornerds'
 
-bot = telegram.Bot(token=telegram_bot_token)
-bot.send_photo(chat_id=telegram_chat_id, photo=open('./images_coopland/bebra_coopland.png', 'rb'),caption=build_post_coopland(headline_coopland,description_coopland,post_url_coopland))
+if __name__ == "__main__":
+
+
+    headline_coopland,description_coopland,picture_url_coopland,post_url_coopland = get_last_news_coopland()
+
+    save_and_download_image(
+    picture_url=picture_url_coopland,
+    photo_path = './images_coopland/_coopland.png'
+    )
+    
+    telegram_bot_token = os.getenv("BOT_TOKEN")
+    telegram_chat_id = '@gamingnewsfornerds'
+
+    bot = telegram.Bot(token=telegram_bot_token)
+    bot.send_photo(chat_id=telegram_chat_id, photo=open('./images_coopland/bebra_coopland.png', 'rb'),caption=build_post_coopland(headline_coopland,description_coopland,post_url_coopland))
 
 
 
