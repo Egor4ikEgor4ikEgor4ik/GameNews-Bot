@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import telegram
+from time import sleep
 
 load_dotenv()
 
@@ -36,21 +37,30 @@ def save_and_download_image(picture_url,photo_path):
 
 
 if __name__ == "__main__":
-
-
-    headline_coopland,description_coopland,picture_url_coopland,post_url_coopland = get_last_news_coopland()
-
-    save_and_download_image(
-    picture_url=picture_url_coopland,
-    photo_path = './images_coopland/_coopland.png'
-    )
     
-    telegram_bot_token = os.getenv("BOT_TOKEN")
-    telegram_chat_id = '@gamingnewsfornerds'
+    published_posts = []
+    
+    while True:
+        headline_coopland,description_coopland,picture_url_coopland,post_url_coopland = get_last_news_coopland()
 
-    bot = telegram.Bot(token=telegram_bot_token)
-    bot.send_photo(chat_id=telegram_chat_id, photo=open('./images_coopland/bebra_coopland.png', 'rb'),caption=build_post_coopland(headline_coopland,description_coopland,post_url_coopland))
+        
+            
+        
+        
+        
+        save_and_download_image(
+        picture_url=picture_url_coopland,
+        photo_path = './images_coopland/bebra_coopland.png'
+        )
+        
+        telegram_bot_token = os.getenv("BOT_TOKEN")
+        telegram_chat_id = '@gamingnewsfornerds'
 
+        if headline_coopland not in published_posts:
+            bot = telegram.Bot(token=telegram_bot_token)
+            bot.send_photo(chat_id=telegram_chat_id, photo=open('./images_coopland/bebra_coopland.png', 'rb'),caption=build_post_coopland(headline_coopland,description_coopland,post_url_coopland))
+            published_posts.append(headline_coopland)
+        sleep(5)
 
 
 
