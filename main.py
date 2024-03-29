@@ -60,7 +60,7 @@ if __name__ == "__main__":
             bot = telegram.Bot(token=telegram_bot_token)
             bot.send_photo(chat_id=telegram_chat_id, photo=open('./images_coopland/bebra_coopland.png', 'rb'),caption=build_post_coopland(headline_coopland,description_coopland,post_url_coopland))
             published_posts.append(headline_coopland)
-        sleep(5)
+        sleep(3600)
 
 
 
