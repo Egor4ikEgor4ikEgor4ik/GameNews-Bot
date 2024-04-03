@@ -1,6 +1,6 @@
 import os
 from textwrap import dedent
-
+import json
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
@@ -38,28 +38,31 @@ def save_and_download_image(picture_url,photo_path):
 
 if __name__ == "__main__":
     
-    published_posts = []
+    telegram_bot_token = os.getenv("BOT_TOKEN")
+    telegram_chat_id = '@gamingnewsfornerds'
+
     
     while True:
         headline_coopland,description_coopland,picture_url_coopland,post_url_coopland = get_last_news_coopland()
 
-        
-            
-        
-        
-        
         save_and_download_image(
         picture_url=picture_url_coopland,
         photo_path = './images_coopland/bebra_coopland.png'
         )
         
-        telegram_bot_token = os.getenv("BOT_TOKEN")
-        telegram_chat_id = '@gamingnewsfornerds'
-
-        if headline_coopland not in published_posts:
+        
+        with open("last_saved_post.json", "r", encoding="CP1251") as my_file:
+            file_contents = my_file.read()
+        file_contents = json.loads(file_contents)
+        
+        if headline_coopland not in file_contents:
+            
             bot = telegram.Bot(token=telegram_bot_token)
             bot.send_photo(chat_id=telegram_chat_id, photo=open('./images_coopland/bebra_coopland.png', 'rb'),caption=build_post_coopland(headline_coopland,description_coopland,post_url_coopland))
-            published_posts.append(headline_coopland)
+            
+            with open("last_saved_post.json", "w", encoding="CP1251") as my_file:
+                file_contents.append(headline_coopland)
+                my_file.write(json.dumps(file_contents))
         sleep(3600)
 
 
